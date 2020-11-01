@@ -1,9 +1,12 @@
 const Discord = require('discord.js');
 const client = new Discord.Client();
 const config = require('./config.json');
-const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
 const fs = require('fs');
+const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
+const schedule = require('./schedule.js');
 client.commands = new Discord.Collection();
+
+module.exports.client = client;
 
 for (const file of commandFiles) {
   const command = require(`./commands/${file}`);
@@ -12,7 +15,8 @@ for (const file of commandFiles) {
 
 // Event Initialization
 client.on('ready', () => {
-    console.log(`Logged in as ${client.user.tag}!`);
+  console.log(`Logged in as ${client.user.tag}!`);
+  schedule.setup();
 });
 
 // Command Handling
@@ -25,9 +29,9 @@ client.on('message', msg => {
   if (!client.commands.has(command)) return;
 
   try {
-      client.commands.get(command).execute(msg, args);
+    client.commands.get(command).execute(msg, args);
   } catch (error) {
-      console.error(error);
+    console.error(error);
   }
 });
 
