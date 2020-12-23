@@ -36,4 +36,4 @@ client.on('message', msg => {
 });
 
 // Connecting with discord
-client.login(process.env.BOT_TOKEN); // BOT_TOKEN is set by heroku at runtime
+client.login(config.token); // token via config.json
